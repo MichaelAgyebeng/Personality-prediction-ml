@@ -32,6 +32,9 @@ if st.button("Predict Personality"):
         }
 
         df = pd.DataFrame([input_data])  # Ensures 2D input
+        df['Stage_fear'] = df['Stage_fear'].map({'Yes': 1, 'No': 0})
+        df['Drained_after_socializing'] = df['Drained_after_socializing'].map({'Yes': 1, 'No': 0})
+
 
         prediction = model.predict(df)[0]
         st.success(f"Predicted Personality: {prediction}")
