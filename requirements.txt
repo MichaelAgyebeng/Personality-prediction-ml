@@ -1,4 +1,6 @@
 Flask
+streamlit
 pandas
 scikit-learn
 joblib
+
