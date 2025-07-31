@@ -4,9 +4,7 @@ A Streamlit-based web application that predicts an individual's personality trai
 
 ## 🚀 Demo
 
-Try it out: ## 🚀 Demo
-<a href="https://your-app-url.streamlit.app" target="_blank">Click here to try the Personality Prediction App</a>
-
+Try it out: [App link here](https://personality-prediction-ml-ghxw9tfavr6nyfn3kx2cxj.streamlit.app/)
 
 ## 📌 Features
 
