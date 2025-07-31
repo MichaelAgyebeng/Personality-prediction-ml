@@ -1,10 +1,10 @@
 import streamlit as st
 import pandas as pd
-import pickle
+import joblib
 
 # Load the model
-with open('model.pkl', 'rb') as f:
-    model = pickle.load(f)
+model = joblib.load("model.pkl")
+
 
 # Streamlit app UI
 st.title("Personality Prediction App")
