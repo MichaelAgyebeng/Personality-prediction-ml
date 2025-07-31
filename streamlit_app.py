@@ -7,7 +7,8 @@ model = joblib.load("model.pkl")
 
 
 # Streamlit app UI
-st.title("Personality Prediction App")
+st.title("🧠 Personality Prediction App")
+st.write("Enter your data below to predict your personality. Estimate those that are not precise.")
 
 # Collect input
 time_spent_alone = st.number_input("Time spent alone (hours)", min_value=0, max_value=24, value=1)
