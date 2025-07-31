@@ -1,48 +1,40 @@
 import streamlit as st
 import pandas as pd
-import joblib
+import pickle
 
-# Load model
-model = joblib.load("model.pkl")
+# Load the model
+with open('model.pkl', 'rb') as f:
+    model = pickle.load(f)
 
-st.title("🧠 Personality Prediction App")
-st.write("Enter the input data below to predict personality.")
+# Streamlit app UI
+st.title("Personality Prediction App")
 
-Time_spent_Alone = st.slider("How much time do you spend alone (hours per day)?", 0, 24, 1)
-Stage_fear = st.selectbox("Do you have stage fear?", ['Yes', 'No'])
-Social_event_attendance = st.slider("How many social events do you attend monthly?", 0, 30, 5)
-Going_outside = st.slider("How often do you go outside (times per week)?", 0, 7, 3)
-Drained_after_socializing = st.selectbox("Do you feel drained after socializing?", ['Yes', 'No'])
-Friends_circle_size = st.number_input("How many close friends do you have?", min_value=0, max_value=100, value=5)
-Post_frequency = st.slider("How often do you post on social media (times per week)?", 0, 20, 3)
+# Collect input
+time_spent_alone = st.number_input("Time spent alone (hours)", min_value=0, max_value=24, value=1)
+stage_fear = st.selectbox("Do you have stage fear?", ["Yes", "No"])
+social_event_attendance = st.number_input("Number of social events attended last month", min_value=0, max_value=30, value=4)
+going_outside = st.number_input("How many times do you go outside in a week?", min_value=0, max_value=30, value=3)
+drained_after_socializing = st.selectbox("Do you feel drained after socializing?", ["Yes", "No"])
+friends_circle_size = st.number_input("How many friends do you have?", min_value=0, max_value=100, value=10)
+post_frequency = st.number_input("How many times do you post on social media weekly?", min_value=0, max_value=100, value=5)
 
-# Prepare the input data
-input_data = pd.DataFrame({
-    'Time_spent_Alone': [Time_spent_Alone],
-    'Stage_fear': [Stage_fear],
-    'Social_event_attendance': [Social_event_attendance],
-    'Going_outside': [Going_outside],
-    'Drained_after_socializing': [Drained_after_socializing],
-    'Friends_circle_size': [Friends_circle_size],
-    'Post_frequency': [Post_frequency],
-})
-
-# Encode categorical variables if model was trained with encoded data
-input_data['Stage_fear'] = input_data['Stage_fear'].map({'Yes': 1, 'No': 0})
-input_data['Drained_after_socializing'] = input_data['Drained_after_socializing'].map({'Yes': 1, 'No': 0})
-
-# Handle missing values if needed
-input_data.fillna(0, inplace=True)
-
-
-# Example features — change these based on your actual model input
-# feature_names = ['Openness', 'Neuroticism', 'Conscientiousness', 'Agreeableness', 'Extraversion', 'Impulsiveness', 'SensationSeeking', 'Age']
-
-# input_data = {}
-# for feature in feature_names:
-#     input_data[feature] = st.number_input(f"{feature}", step=0.1)
-
+# Predict
 if st.button("Predict Personality"):
-    df = pd.DataFrame([input_data])
-    prediction = model.predict(df)[0]
-    st.success(f"Predicted Personality: **{prediction}**")
+    try:
+        input_data = {
+            'Time_spent_Alone': time_spent_alone,
+            'Stage_fear': stage_fear,
+            'Social_event_attendance': social_event_attendance,
+            'Going_outside': going_outside,
+            'Drained_after_socializing': drained_after_socializing,
+            'Friends_circle_size': friends_circle_size,
+            'Post_frequency': post_frequency
+        }
+
+        df = pd.DataFrame([input_data])  # Ensures 2D input
+
+        prediction = model.predict(df)[0]
+        st.success(f"Predicted Personality: {prediction}")
+
+    except Exception as e:
+        st.error(f"Prediction failed. Error: {str(e)}")
